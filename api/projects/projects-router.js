@@ -3,7 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 const Projects = require('./projects-model');
-const { validateId, validateBody } = require('./projects-middleware');
+const { validateId, validateBody, validatePut } = require('./projects-middleware');
 
 router.get('/', (req, res, next) => {
     Projects.get()
@@ -25,14 +25,15 @@ router.post('/', validateBody, (req, res, next) => {
         .catch(next)
 })
 
-router.put('/:id', validateId, validateBody, (req, res, next) => {
+router.put('/:id', validateId, validatePut, (req, res, next) => {
 
     const changes = {
         name: req.body.name,
         description: req.body.description,
-        completed: req.body.completed || false,
+        completed: req.body.completed,
         id: req.params.id
     }
+    
     Projects.update(req.params.id, changes)
         .then((updatedProject) => {
             res.status(200).json(updatedProject)

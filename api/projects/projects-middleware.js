@@ -17,7 +17,16 @@ function validateId(req, res, next) {
 }
 
 function validateBody(req, res, next) {
-    if(!req.body.name || !req.body.description) {
+    if(!req.body.name || !req.body.description ) {
+        next({ status: 400, message: 'Bad request, be sure to include a body and description when creating a project.'})
+    } else {
+        next()
+    }
+}
+
+function validatePut(req, res, next) {
+    console.log(req)
+    if(!req.body.name || !req.body.description || req.body.completed === undefined) {
         next({ status: 400, message: 'Bad request, be sure to include a body and description when creating a project.'})
     } else {
         next()
@@ -28,4 +37,5 @@ function validateBody(req, res, next) {
 module.exports = { 
     validateId,
     validateBody,
+    validatePut,
  }
